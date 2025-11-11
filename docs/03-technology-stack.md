@@ -360,7 +360,7 @@ public class MappingProfile : Profile
   - JSON/YAML schema export
   - Authentication support
 
-**Access**: `https://localhost:7000/swagger`
+**Access**: `http://localhost:5038/swagger`
 
 **Why Swagger?**
 - Industry standard API docs

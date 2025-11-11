@@ -54,14 +54,12 @@ dotnet ef database update --project src/Infrastructure --startup-project src/API
 
 ### 5. Run Application
 ```bash
-cd src/API
-dotnet run
+dotnet run --project src/API/API.csproj
 ```
 
 The API will be available at:
-- **HTTPS**: https://localhost:7000
-- **HTTP**: http://localhost:5000
-- **Swagger UI**: https://localhost:7000/swagger
+- **HTTP**: http://localhost:5038
+- **Swagger UI**: http://localhost:5038/swagger
 
 ### 6. Test Email (Optional)
 View sent emails at: http://localhost:8025

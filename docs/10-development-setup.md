@@ -78,7 +78,7 @@ You should see:
 Set up sensitive configuration (development only):
 
 ```bash
-cd TwitterClone.API
+cd src/API
 
 # Initialize user secrets
 dotnet user-secrets init
@@ -137,21 +137,20 @@ dotnet ef database update --project src/Infrastructure --startup-project src/API
 
 ### 7. Run Application
 
+**From solution root**:
 ```bash
-cd src/API
-dotnet run
+dotnet run --project src/API/API.csproj
 ```
 
 Or with hot reload (recommended for development):
 ```bash
-dotnet watch run
+dotnet watch --project src/API/API.csproj
 ```
 
 **Application URLs**:
-- **HTTPS**: https://localhost:7000
-- **HTTP**: http://localhost:5000
-- **Swagger UI**: https://localhost:7000/swagger
-- **Hangfire Dashboard**: https://localhost:7000/hangfire
+- **HTTP**: http://localhost:5038
+- **Swagger UI**: http://localhost:5038/swagger
+- **Hangfire Dashboard**: http://localhost:5038/hangfire
 
 ---
 
@@ -464,12 +463,12 @@ dotnet list package --outdated
 
 ### Issue: Port Already in Use
 
-**Symptoms**: `Failed to bind to address http://localhost:5000`
+**Symptoms**: `Failed to bind to address http://localhost:5038`
 
 **Solution**:
 1. Change port in `launchSettings.json`:
 ```json
-"applicationUrl": "https://localhost:7001;http://localhost:5001"
+"applicationUrl": "http://localhost:5039"
 ```
 
 2. Or kill process using port:
@@ -564,11 +563,11 @@ if (app.Environment.IsDevelopment())
 
 After setup is complete:
 
-1. **Explore Swagger**: https://localhost:7000/swagger
+1. **Explore Swagger**: http://localhost:5038/swagger
 2. **Test Registration**: `POST /api/auth/register`
 3. **Check Email in Mailpit**: http://localhost:8025
 4. **View Database**: http://localhost:5050
-5. **Monitor Background Jobs**: https://localhost:7000/hangfire
+5. **Monitor Background Jobs**: http://localhost:5038/hangfire
 
 ---
 

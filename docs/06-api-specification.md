@@ -4,7 +4,7 @@
 
 ### Base URL
 ```
-Development: https://localhost:7000/api
+Development: http://localhost:5038/api
 Production: https://api.yourdomain.com/api
 ```
 
@@ -436,16 +436,16 @@ Retrieves public user profile.
     "profileImage": {
       "id": "img_123",
       "urls": {
-        "thumbnail": "https://localhost:7000/uploads/.../thumbnail.webp",
-        "small": "https://localhost:7000/uploads/.../small.webp",
-        "medium": "https://localhost:7000/uploads/.../medium.webp"
+        "thumbnail": "http://localhost:5038/uploads/.../thumbnail.webp",
+        "small": "http://localhost:5038/uploads/.../small.webp",
+        "medium": "http://localhost:5038/uploads/.../medium.webp"
       },
       "altText": "Profile picture"
     },
     "backgroundImage": {
       "id": "img_456",
       "urls": {
-        "large": "https://localhost:7000/uploads/.../large.webp"
+        "large": "http://localhost:5038/uploads/.../large.webp"
       },
       "altText": null
     },
@@ -822,10 +822,10 @@ altText: "Description of image" (optional)
   "image": {
     "id": "img_123",
     "urls": {
-      "thumbnail": "https://localhost:7000/uploads/.../thumbnail.webp",
-      "small": "https://localhost:7000/uploads/.../small.webp",
-      "medium": "https://localhost:7000/uploads/.../medium.webp",
-      "large": "https://localhost:7000/uploads/.../large.webp"
+      "thumbnail": "http://localhost:5038/uploads/.../thumbnail.webp",
+      "small": "http://localhost:5038/uploads/.../small.webp",
+      "medium": "http://localhost:5038/uploads/.../medium.webp",
+      "large": "http://localhost:5038/uploads/.../large.webp"
     },
     "width": 1920,
     "height": 1080,
@@ -1277,4 +1277,4 @@ All endpoints documented with:
 - Error responses
 - Business logic notes
 
-**Complete interactive documentation**: https://localhost:7000/swagger
+**Complete interactive documentation**: http://localhost:5038/swagger
