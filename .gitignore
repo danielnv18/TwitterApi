@@ -26,8 +26,6 @@ appsettings.*.local.json
 # Local storage and uploads
 storage/
 
-# EF Core
-Migrations/
 
 # Docker artifacts
 docker-compose.override.yml

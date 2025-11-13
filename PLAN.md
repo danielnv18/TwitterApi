@@ -96,12 +96,13 @@ This plan breaks down the TwitterCloneApi implementation into logical phases, bu
 - [x] Add validation rules in entities
 
 #### 1.2 Infrastructure Layer
-- [ ] Configure `User` entity mapping
-- [ ] Configure `RefreshToken` entity mapping
-- [ ] Create initial migration: `dotnet ef migrations add InitialCreate`
-- [ ] Apply migration: `dotnet ef database update`
-- [ ] Implement `PasswordHasher` service (BCrypt)
-- [ ] Implement `JwtService` (generate access + refresh tokens)
+- [x] Configure `User` entity mapping
+- [x] Configure `RefreshToken` entity mapping
+- [x] Configure `EmailVerificationToken` entity mapping
+- [x] Create initial migration: `dotnet ef migrations add InitialCreate`
+- [x] Apply migration: `dotnet ef database update`
+- [x] Implement `PasswordHasher` service (BCrypt)
+- [x] Implement `JwtService` (generate access + refresh tokens)
 
 #### 1.3 Application Layer
 - [ ] Create `IPasswordHasher` interface
