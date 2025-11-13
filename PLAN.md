@@ -90,10 +90,10 @@ This plan breaks down the TwitterCloneApi implementation into logical phases, bu
 ### Tasks
 
 #### 1.1 Domain Layer
-- [ ] Create `User` entity (Id, Username, Email, PasswordHash, EmailVerified)
-- [ ] Create `RefreshToken` entity
-- [ ] Create `EmailVerificationToken` entity
-- [ ] Add validation rules in entities
+- [x] Create `User` entity (Id, Username, Email, PasswordHash, EmailVerified)
+- [x] Create `RefreshToken` entity
+- [x] Create `EmailVerificationToken` entity
+- [x] Add validation rules in entities
 
 #### 1.2 Infrastructure Layer
 - [ ] Configure `User` entity mapping
