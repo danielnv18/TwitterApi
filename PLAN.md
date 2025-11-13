@@ -26,58 +26,60 @@ This plan breaks down the TwitterCloneApi implementation into logical phases, bu
 ### Tasks
 
 #### 0.1 Create Solution Structure
-- [ ] Create solution: `dotnet new sln -n TwitterCloneApi`
-- [ ] Create projects:
-  - [ ] `Domain` (classlib)
-  - [ ] `Application` (classlib)
-  - [ ] `Infrastructure` (classlib)
-  - [ ] `API` (webapi)
-  - [ ] `UnitTests` (xunit)
-  - [ ] `IntegrationTests` (xunit)
-  - [ ] `ArchitectureTests` (xunit)
-- [ ] Add project references (Domain ← Application ← Infrastructure ← API)
-- [ ] Configure `RootNamespace` in each `.csproj`
+- [x] Create solution: `dotnet new sln -n TwitterCloneApi`
+- [x] Create projects:
+  - [x] `Domain` (classlib)
+  - [x] `Application` (classlib)
+  - [x] `Infrastructure` (classlib)
+  - [x] `API` (webapi)
+  - [x] `UnitTests` (xunit)
+  - [x] `IntegrationTests` (xunit)
+  - [x] `ArchitectureTests` (xunit)
+- [x] Add project references (Domain ← Application ← Infrastructure ← API)
+- [x] Configure `RootNamespace` in each `.csproj`
 
 #### 0.2 Install NuGet Packages
-- [ ] **Domain**: None (keep clean)
-- [ ] **Application**: 
+- [x] **Domain**: None (keep clean)
+- [x] **Application**: 
   - MediatR
   - FluentValidation
   - AutoMapper
-- [ ] **Infrastructure**:
-  - Npgsql.EntityFrameworkCore.PostgreSQL
+- [x] **Infrastructure**:
+  - Microsoft.EntityFrameworkCore.SqlServer
   - Microsoft.EntityFrameworkCore.Design
   - BCrypt.Net-Next
-- [ ] **API**:
+- [x] **API**:
   - Swashbuckle.AspNetCore
   - Microsoft.AspNetCore.Authentication.JwtBearer
-- [ ] **Tests**:
+  - Serilog.AspNetCore
+- [x] **Tests**:
   - xUnit
   - FluentAssertions
   - Moq
   - Testcontainers
+  - NetArchTest.Rules
 
 #### 0.3 Setup Base Classes
-- [ ] Create `BaseEntity` in Domain
-- [ ] Create `Result<T>` wrapper in Application
-- [ ] Create base exceptions in Application
-- [ ] Configure AutoMapper profile
-- [ ] Setup MediatR pipeline behaviors (validation, logging)
+- [x] Create `BaseEntity` in Domain
+- [x] Create `Result<T>` wrapper in Application
+- [x] Create base exceptions in Application (ValidationException, NotFoundException, UnauthorizedException, ConflictException)
+- [x] Configure AutoMapper profile
+- [x] Setup MediatR pipeline behaviors (validation)
 
 #### 0.4 Configure API
-- [ ] Setup Swagger/OpenAPI
-- [ ] Configure CORS
-- [ ] Add global exception handler middleware
-- [ ] Configure JSON serialization options
-- [ ] Setup Serilog logging
+- [x] Setup Swagger/OpenAPI
+- [x] Configure CORS
+- [x] Add global exception handler middleware
+- [x] Configure JSON serialization options (default)
+- [x] Setup Serilog logging
 
 #### 0.5 Database Setup
-- [ ] Create `ApplicationDbContext` in Infrastructure
-- [ ] Configure connection string in appsettings
-- [ ] Setup User Secrets for development
-- [ ] Verify Docker containers running (PostgreSQL, Mailpit)
+- [x] Create `ApplicationDbContext` in Infrastructure
+- [x] Configure connection string in appsettings
+- [x] Setup User Secrets for development
+- [x] Verify Docker containers running (SQL Server, Mailpit)
 
-**Deliverable**: Empty project structure, compiles, Swagger loads
+**Deliverable**: ✅ Empty project structure, compiles, Swagger loads
 
 ---
 
@@ -780,7 +782,9 @@ This plan breaks down the TwitterCloneApi implementation into logical phases, bu
 
 ---
 
-**Last Updated**: November 10, 2025  
-**Status**: Ready to start Phase 0
+**Last Updated**: November 13, 2025  
+**Status**: Phase 0 Complete ✅ - Ready for Phase 1
+
+**Note**: Using SQL Server instead of PostgreSQL for database
 
 🚀 Let's build this! Start with Phase 0 and work your way through systematically.

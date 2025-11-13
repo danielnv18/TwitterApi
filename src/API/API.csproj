@@ -5,6 +5,7 @@
     <RootNamespace>TwitterCloneApi.API</RootNamespace>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>twitterclone-api-secrets</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

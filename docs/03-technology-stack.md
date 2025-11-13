@@ -44,18 +44,19 @@ This document details all technologies, libraries, and tools used in the Twitter
 
 ## Database
 
-### PostgreSQL 16
+### SQL Server 2022
 - **Purpose**: Primary relational database
 - **Justification**:
-  - Open-source and free
-  - Excellent performance
+  - Industry-standard enterprise database
+  - Excellent performance and scalability
   - ACID compliance
-  - Advanced features (full-text search, JSONB)
+  - Advanced features (full-text search, JSON support, temporal tables)
   - Great EF Core support
-  - Industry standard
-  - Can migrate to SQL Server later (database-agnostic design)
+  - Free Developer Edition
+  - SQL Server-specific optimizations available
+  - Native integration with Azure
 
-**Docker Image**: `postgres:16-alpine`
+**Docker Image**: `mcr.microsoft.com/mssql/server:2022-latest`
 
 ### Entity Framework Core 9.0
 - **Purpose**: ORM (Object-Relational Mapper)
@@ -71,7 +72,7 @@ This document details all technologies, libraries, and tools used in the Twitter
 ```xml
 <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.*" />
 <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.*" />
-<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.*" />
+<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.*" />
 <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.*" />
 ```
 
@@ -84,14 +85,14 @@ This document details all technologies, libraries, and tools used in the Twitter
 
 **Database Provider Strategy**:
 To support future SQL Server migration:
-- Avoid PostgreSQL-specific features
+- Avoid SQL Server-specific features
 - Use standard SQL types
 - Use EF Core abstractions (not raw SQL)
 - Test migrations on both databases (future)
 
 **Switching to SQL Server** (future):
 ```xml
-<!-- Replace Npgsql package with: -->
+<!-- Replace Microsoft.Data.SqlClient package with: -->
 <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.*" />
 ```
 
@@ -195,7 +196,7 @@ public class RegisterCommandValidator : AbstractValidator<RegisterCommand>
 - Most popular .NET background job library
 - Simple setup
 - Great dashboard for monitoring
-- PostgreSQL storage support
+- SQL Server storage support
 - Can scale to distributed (Redis backend)
 
 **Alternatives Considered**:
@@ -436,7 +437,7 @@ mockEmailService
 - **Package**: `Testcontainers.PostgreSql` (3.10.*)
 - **Purpose**: Integration testing with real database
 - **Features**:
-  - Spin up PostgreSQL in Docker
+  - Spin up SQL Server in Docker
   - Isolated test database
   - Automatic cleanup
   - Fast parallel execution
@@ -541,7 +542,7 @@ public void Domain_Should_Not_Depend_On_Other_Layers()
 - **Version**: Latest stable
 - **Purpose**: Local development environment
 - **Services**:
-  - PostgreSQL (database)
+  - SQL Server (database)
   - Mailpit (email testing)
   - PgAdmin (database management)
 
@@ -549,7 +550,7 @@ public void Domain_Should_Not_Depend_On_Other_Layers()
 
 #### PgAdmin 4
 - **Docker Image**: `dpage/pgadmin4:latest`
-- **Purpose**: PostgreSQL GUI
+- **Purpose**: SQL Server GUI
 - **Access**: http://localhost:5050
 - **Features**:
   - Visual query builder
@@ -641,7 +642,7 @@ var result = await _mediator.Send(new CreatePostCommand());
 <!-- Database -->
 <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.*" />
 <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.*" />
-<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.*" />
+<PackageReference Include="Microsoft.Data.SqlClient.EntityFrameworkCore.SQL Server" Version="9.0.*" />
 
 <!-- Authentication -->
 <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.*" />
@@ -750,7 +751,7 @@ dotnet outdated --upgrade
 All libraries used are **commercially friendly**:
 - MIT License: Most libraries (EF Core, xUnit, Serilog, etc.)
 - Apache 2.0: ImageSharp, Swashbuckle
-- BSD: PostgreSQL
+- BSD: SQL Server
 
 **No GPL dependencies** (allows commercial use without open-sourcing your code).
 

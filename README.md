@@ -7,7 +7,7 @@ A Twitter/X clone REST API built with .NET 9, demonstrating Clean Architecture a
 - **.NET 9** - Latest LTS framework
 - **ASP.NET Core Web API** - RESTful API
 - **Entity Framework Core 9** - ORM
-- **PostgreSQL 16** - Database
+- **SQL Server 2022** - Database
 - **Clean Architecture** - Separation of concerns
 - **CQRS** - MediatR pattern
 - **Hangfire** - Background jobs
@@ -35,9 +35,8 @@ docker-compose up -d
 ```
 
 This starts:
-- PostgreSQL (port 5432)
+- SQL Server 2022 (port 1433)
 - Mailpit (port 8025 - email testing UI)
-- PgAdmin (port 5050 - optional)
 
 ### 3. Configure User Secrets
 ```bash

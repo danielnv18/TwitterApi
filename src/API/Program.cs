@@ -1,5 +1,7 @@
 using Serilog;
+using TwitterCloneApi.API.Middleware;
 using TwitterCloneApi.Application;
+using TwitterCloneApi.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +21,9 @@ builder.Services.AddRouting(options =>
 
 // Add Application services
 builder.Services.AddApplication();
+
+// Add Infrastructure services
+builder.Services.AddInfrastructure(builder.Configuration);
 
 // Add API documentation
 builder.Services.AddEndpointsApiExplorer();
@@ -57,6 +62,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseSerilogRequestLogging();
+
+// Global exception handler
+app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
 
 app.UseCors("AllowAll");
 

@@ -52,7 +52,7 @@ cd TwitterCloneApi
 
 ### 2. Start Docker Services
 
-Start PostgreSQL, Mailpit, and PgAdmin:
+Start SQL Server, Mailpit, and Azure Data Studio:
 
 ```bash
 docker-compose up -d
@@ -64,14 +64,14 @@ docker-compose ps
 ```
 
 You should see:
-- `twitter-clone-postgres` (healthy)
+- `twitter-clone-sqlserver` (healthy)
 - `twitter-clone-mailpit` (running)
-- `twitter-clone-pgadmin` (running)
 
 **Access Services**:
-- **PostgreSQL**: `localhost:5432`
+- **SQL Server**: `localhost:1433`
 - **Mailpit UI**: http://localhost:8025
-- **PgAdmin**: http://localhost:5050
+
+**Note**: Use Azure Data Studio or SQL Server Management Studio (SSMS) to manage the database.
 
 ### 3. Configure User Secrets
 
@@ -87,7 +87,7 @@ dotnet user-secrets init
 dotnet user-secrets set "JwtSettings:SecretKey" "your-super-secret-key-at-least-32-characters-long"
 
 # Optional: Set connection string (if different from appsettings)
-dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Host=localhost;Port=5432;Database=twitter_clone_dev;Username=twitter_user;Password=dev_password_2024"
+dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Server=localhost,1433;Database=TwitterCloneDb;User Id=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=True;MultipleActiveResultSets=true"
 ```
 
 **Generate Strong Secret Key** (PowerShell):
@@ -125,15 +125,15 @@ dotnet ef database update --project src/Infrastructure --startup-project src/API
 ```
 
 **Verify database created**:
-1. Open PgAdmin: http://localhost:5050
-2. Login: `admin@twitter-clone.local` / `admin123`
-3. Add server:
-   - Name: `Twitter Clone Dev`
-   - Host: `postgres` (service name in Docker network)
-   - Port: `5432`
-   - Database: `twitter_clone_dev`
-   - Username: `twitter_user`
-   - Password: `dev_password_2024`
+1. Download Azure Data Studio: https://docs.microsoft.com/sql/azure-data-studio/download
+2. Or use SQL Server Management Studio (SSMS)
+3. Connect to server:
+   - Server: `localhost,1433`
+   - Authentication: `SQL Login`
+   - Username: `sa`
+   - Password: `YourStrong!Passw0rd`
+   - Trust Server Certificate: `Yes`
+4. Verify database `TwitterCloneDb` exists
 
 ### 7. Run Application
 
@@ -256,7 +256,7 @@ TwitterCloneApi/
     }
   },
   "ConnectionStrings": {
-    "DefaultConnection": "Host=localhost;Port=5432;Database=twitter_clone_dev;Username=twitter_user;Password=dev_password_2024"
+    "DefaultConnection": "Server=localhost,1433;Database=TwitterCloneDb;User Id=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=True;MultipleActiveResultSets=true"
   },
   "EmailSettings": {
     "SmtpHost": "localhost",
@@ -412,11 +412,11 @@ docker-compose up -d
 docker-compose down
 
 # View logs
-docker-compose logs -f postgres
+docker-compose logs -f sqlserver
 docker-compose logs -f mailpit
 
 # Restart service
-docker-compose restart postgres
+docker-compose restart sqlserver
 
 # Remove all data (fresh start)
 docker-compose down -v
@@ -487,8 +487,8 @@ lsof -ti:5000 | xargs kill -9
 
 **Solution**:
 1. Check Docker is running: `docker ps`
-2. Check PostgreSQL is healthy: `docker-compose ps`
-3. Restart PostgreSQL: `docker-compose restart postgres`
+2. Check SQL Server is healthy: `docker-compose ps`
+3. Restart SQL Server: `docker-compose restart sqlserver`
 4. Check connection string in `appsettings.json`
 
 ### Issue: Migration Fails
@@ -654,7 +654,7 @@ After setup is complete:
 ### Documentation
 - [ASP.NET Core Docs](https://docs.microsoft.com/aspnet/core)
 - [Entity Framework Core Docs](https://docs.microsoft.com/ef/core)
-- [PostgreSQL Docs](https://www.postgresql.org/docs/)
+- [SQL Server Docs](https://www.sqlserverql.org/docs/)
 
 ### Learning
 - [Microsoft Learn - .NET](https://learn.microsoft.com/dotnet)
@@ -674,9 +674,9 @@ After setup is complete:
 
 You now have:
 - .NET 9 API running
-- PostgreSQL database with migrations
+- SQL Server database with migrations
 - Mailpit for email testing
-- PgAdmin for database management
+- Azure Data Studio for database management
 - Swagger for API documentation
 - Hot reload for fast development
 

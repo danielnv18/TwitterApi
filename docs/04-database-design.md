@@ -2,15 +2,15 @@
 
 ## Overview
 
-This document provides the complete database schema for the Twitter Clone application. The design uses PostgreSQL but avoids PostgreSQL-specific features to allow migration to SQL Server in the future.
+This document provides the complete database schema for the Twitter Clone application. The design uses **SQL Server 2022** and leverages SQL Server-specific features for optimal performance.
 
 ## Design Principles
 
 1. **Normalization**: 3NF (Third Normal Form) to minimize redundancy
 2. **Integrity**: Foreign keys and constraints enforce data validity
-3. **Performance**: Strategic indexing for common queries
+3. **Performance**: Strategic indexing and SQL Server features for common queries
 4. **Scalability**: Designed for millions of rows
-5. **Database-Agnostic**: Standard SQL features only
+5. **SQL Server Features**: Utilizes SEQUENCE, filtered indexes, and computed columns
 
 ## Entity Relationship Diagram
 

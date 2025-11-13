@@ -7,14 +7,11 @@ namespace TwitterCloneApi.API.Controllers;
 public class HealthController : ControllerBase
 {
     [HttpGet]
-    public IActionResult Get()
+    public IActionResult Get() => Ok(new
     {
-        return Ok(new
-        {
-            status = "Healthy",
-            timestamp = DateTime.UtcNow,
-            service = "TwitterCloneApi",
-            version = "1.0.0"
-        });
-    }
+        status = "Healthy",
+        timestamp = DateTime.UtcNow,
+        service = "TwitterCloneApi",
+        version = "1.0.0"
+    });
 }

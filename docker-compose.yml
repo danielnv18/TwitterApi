@@ -1,22 +1,22 @@
 version: '3.8'
 
 services:
-  # PostgreSQL Database
-  postgres:
-    image: postgres:16-alpine
-    container_name: twitter-clone-postgres
+  # SQL Server Database
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: twitter-clone-sqlserver
     restart: unless-stopped
     environment:
-      POSTGRES_DB: twitter_clone_dev
-      POSTGRES_USER: twitter_user
-      POSTGRES_PASSWORD: dev_password_2024
-      POSTGRES_INITDB_ARGS: "--encoding=UTF8"
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "YourStrong!Passw0rd"
+      MSSQL_PID: "Developer"
+      MSSQL_TCP_PORT: 1433
     ports:
-      - "5432:5432"
+      - "1433:1433"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - sqlserver_data:/var/opt/mssql
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U twitter_user -d twitter_clone_dev"]
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P YourStrong!Passw0rd -C -Q 'SELECT 1' || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -38,30 +38,8 @@ services:
     networks:
       - twitter-network
 
-  # PgAdmin - PostgreSQL Management
-  pgadmin:
-    image: dpage/pgadmin4:latest
-    container_name: twitter-clone-pgadmin
-    restart: unless-stopped
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@twitter-clone.local
-      PGADMIN_DEFAULT_PASSWORD: admin123
-      PGADMIN_CONFIG_SERVER_MODE: 'False'
-      PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: 'False'
-    ports:
-      - "5050:80"
-    depends_on:
-      postgres:
-        condition: service_healthy
-    volumes:
-      - pgadmin_data:/var/lib/pgadmin
-    networks:
-      - twitter-network
-
 volumes:
-  postgres_data:
-    driver: local
-  pgadmin_data:
+  sqlserver_data:
     driver: local
 
 networks:
