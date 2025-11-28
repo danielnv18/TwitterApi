@@ -1,3 +1,4 @@
+using Scalar.AspNetCore;
 using Serilog;
 using TwitterCloneApi.API.Middleware;
 using TwitterCloneApi.Application;
@@ -25,17 +26,8 @@ builder.Services.AddApplication();
 // Add Infrastructure services
 builder.Services.AddInfrastructure(builder.Configuration);
 
-// Add API documentation
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
-{
-    options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
-    {
-        Title = "TwitterCloneApi",
-        Version = "v1",
-        Description = "Twitter Clone REST API built with .NET 9 and Clean Architecture"
-    });
-});
+// Add OpenAPI documentation (.NET 10 built-in support)
+builder.Services.AddOpenApi();
 
 // Add CORS
 builder.Services.AddCors(options =>
@@ -53,12 +45,8 @@ var app = builder.Build();
 // Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "TwitterCloneApi v1");
-        c.RoutePrefix = "swagger";
-    });
+    app.MapOpenApi();
+    app.MapScalarApiReference();
 }
 
 app.UseSerilogRequestLogging();
