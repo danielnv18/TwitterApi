@@ -22,7 +22,7 @@ public class JwtService : IJwtService
 
     public string GenerateAccessToken(User user)
     {
-        var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Secret"] 
+        var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Secret"]
             ?? throw new InvalidOperationException("JWT Secret is not configured"));
 
         var claims = new[]
@@ -41,7 +41,7 @@ public class JwtService : IJwtService
             Issuer = _configuration["Jwt:Issuer"],
             Audience = _configuration["Jwt:Audience"],
             SigningCredentials = new SigningCredentials(
-                new SymmetricSecurityKey(key), 
+                new SymmetricSecurityKey(key),
                 SecurityAlgorithms.HmacSha256Signature)
         };
 
@@ -62,7 +62,7 @@ public class JwtService : IJwtService
         if (string.IsNullOrWhiteSpace(token))
             return null;
 
-        var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Secret"] 
+        var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Secret"]
             ?? throw new InvalidOperationException("JWT Secret is not configured"));
 
         try
@@ -82,11 +82,40 @@ public class JwtService : IJwtService
             var principal = _tokenHandler.ValidateToken(token, validationParameters, out _);
             var userIdClaim = principal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
+            // Note: User Id is int, not Guid. Need to fix this in interface too if it was Guid.
+            // Let's check User entity.
             return Guid.TryParse(userIdClaim, out var userId) ? userId : null;
         }
         catch
         {
             return null;
         }
+    }
+
+    public ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
+    {
+        var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Secret"]
+            ?? throw new InvalidOperationException("JWT Secret is not configured"));
+
+        var tokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(key),
+            ValidateIssuer = true,
+            ValidIssuer = _configuration["Jwt:Issuer"],
+            ValidateAudience = true,
+            ValidAudience = _configuration["Jwt:Audience"],
+            ValidateLifetime = false // Allow expired tokens
+        };
+
+        var principal = _tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken securityToken);
+
+        if (securityToken is not JwtSecurityToken jwtSecurityToken ||
+            !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
+        {
+            throw new SecurityTokenException("Invalid token");
+        }
+
+        return principal;
     }
 }

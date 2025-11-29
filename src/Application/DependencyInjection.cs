@@ -13,7 +13,8 @@ public static class DependencyInjection
         var assembly = Assembly.GetExecutingAssembly();
 
         // MediatR
-        services.AddMediatR(cfg => {
+        services.AddMediatR(cfg =>
+        {
             cfg.RegisterServicesFromAssembly(assembly);
         });
 

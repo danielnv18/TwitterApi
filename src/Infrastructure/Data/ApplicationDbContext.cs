@@ -1,9 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using TwitterCloneApi.Domain.Entities;
 
+using TwitterCloneApi.Application.Common.Interfaces;
+
 namespace TwitterCloneApi.Infrastructure.Data;
 
-public class ApplicationDbContext : DbContext
+public class ApplicationDbContext : DbContext, IApplicationDbContext
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)

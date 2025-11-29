@@ -6,7 +6,7 @@ public class ConflictException : Exception
     {
     }
 
-    public ConflictException(string name, object key) 
+    public ConflictException(string name, object key)
         : base($"{name} with id '{key}' already exists.")
     {
     }

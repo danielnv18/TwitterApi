@@ -37,7 +37,7 @@ public class User : BaseEntity
         if (string.IsNullOrWhiteSpace(Email))
             throw new ArgumentException("Email cannot be empty");
 
-        if (!System.Text.RegularExpressions.Regex.IsMatch(Email, 
+        if (!System.Text.RegularExpressions.Regex.IsMatch(Email,
             @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
             throw new ArgumentException("Invalid email format");
     }
