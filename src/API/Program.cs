@@ -3,6 +3,7 @@ using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
 using System.Text;
 using Serilog;
+using TwitterCloneApi.API.Endpoints;
 using TwitterCloneApi.API.Middleware;
 using TwitterCloneApi.Application;
 using TwitterCloneApi.Infrastructure;
@@ -14,7 +15,10 @@ builder.Host.UseSerilog((context, configuration) =>
     configuration.ReadFrom.Configuration(context.Configuration));
 
 // Add services to the container
-builder.Services.AddControllers();
+// Controllers removed - using Minimal API endpoints instead
+
+// Add Problem Details for better error responses
+builder.Services.AddProblemDetails();
 
 // Configure URL routing (lowercase, kebab-case)
 builder.Services.AddRouting(options =>
@@ -56,6 +60,9 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+// Add Authorization
+builder.Services.AddAuthorization();
+
 // Add CORS
 builder.Services.AddCors(options =>
 {
@@ -78,15 +85,50 @@ if (app.Environment.IsDevelopment())
 
 app.UseSerilogRequestLogging();
 
-// Global exception handler
-app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
+// Use built-in exception handler for Minimal API
+app.UseExceptionHandler(exceptionHandlerApp =>
+{
+    exceptionHandlerApp.Run(async context =>
+    {
+        var exceptionHandlerFeature = context.Features.Get<Microsoft.AspNetCore.Diagnostics.IExceptionHandlerFeature>();
+        var exception = exceptionHandlerFeature?.Error;
+
+        if (exception == null)
+        {
+            return;
+        }
+
+        var (statusCode, message) = exception switch
+        {
+            TwitterCloneApi.Application.Common.Exceptions.ValidationException => (StatusCodes.Status400BadRequest, "One or more validation errors occurred."),
+            TwitterCloneApi.Application.Common.Exceptions.NotFoundException notFound => (StatusCodes.Status404NotFound, notFound.Message),
+            TwitterCloneApi.Application.Common.Exceptions.UnauthorizedException unauthorized => (StatusCodes.Status401Unauthorized, unauthorized.Message),
+            TwitterCloneApi.Application.Common.Exceptions.ConflictException conflict => (StatusCodes.Status409Conflict, conflict.Message),
+            _ => (StatusCodes.Status500InternalServerError, "An unexpected error occurred.")
+        };
+
+        context.Response.StatusCode = statusCode;
+        context.Response.ContentType = "application/json";
+
+        var response = new
+        {
+            StatusCode = statusCode,
+            Message = message
+        };
+
+        await context.Response.WriteAsJsonAsync(response);
+    });
+});
 
 app.UseCors("AllowAll");
 
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllers();
+// Map Minimal API endpoints
+app.MapAuthEndpoints();
+app.MapUsersEndpoints();
+app.MapHealthEndpoints();
 
 app.Run();
 
