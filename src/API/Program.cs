@@ -29,6 +29,9 @@ builder.Services.AddApplication();
 // Add Infrastructure services
 builder.Services.AddInfrastructure(builder.Configuration);
 
+// Add HttpContextAccessor for CurrentUserService
+builder.Services.AddHttpContextAccessor();
+
 // Add OpenAPI documentation (.NET 10 built-in support)
 builder.Services.AddOpenApi();
 

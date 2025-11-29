@@ -6,7 +6,7 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        // Mappings will be added here as we create DTOs
-        // Example: CreateMap<User, UserDto>();
+        // User mappings
+        CreateMap<Domain.Entities.User, Features.Users.Common.UserDto>();
     }
 }

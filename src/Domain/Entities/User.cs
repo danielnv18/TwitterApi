@@ -15,6 +15,11 @@ public class User : BaseEntity
     public DateTime? EmailVerifiedAt { get; set; }
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
+    // Computed properties (will be populated from database queries)
+    public int FollowerCount { get; set; }
+    public int FollowingCount { get; set; }
+    public int PostCount { get; set; }
+
     // Navigation properties
     public ICollection<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
     public ICollection<EmailVerificationToken> EmailVerificationTokens { get; set; } = new List<EmailVerificationToken>();
@@ -40,6 +45,15 @@ public class User : BaseEntity
         if (!System.Text.RegularExpressions.Regex.IsMatch(Email,
             @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
             throw new ArgumentException("Invalid email format");
+    }
+
+    public void ValidateDisplayName()
+    {
+        if (string.IsNullOrWhiteSpace(DisplayName))
+            throw new ArgumentException("Display name cannot be empty");
+
+        if (DisplayName.Length < 1 || DisplayName.Length > 50)
+            throw new ArgumentException("Display name must be between 1 and 50 characters");
     }
 
     public void ValidateBio()

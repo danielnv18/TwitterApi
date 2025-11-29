@@ -68,6 +68,7 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, AuthRespo
         {
             Username = request.Username,
             Email = request.Email,
+            DisplayName = request.Username, // Default to username
             PasswordHash = passwordHash,
             EmailVerified = false
         };
