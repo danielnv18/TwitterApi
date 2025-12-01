@@ -2,7 +2,6 @@ using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using FluentAssertions;
-using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using TwitterCloneApi.Application.Features.Auth.Commands.Login;
 using TwitterCloneApi.Application.Features.Auth.Commands.Register;

@@ -4,7 +4,6 @@ using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
 using Serilog;
 using TwitterCloneApi.API.Endpoints;
-using TwitterCloneApi.API.Middleware;
 using TwitterCloneApi.Application;
 using TwitterCloneApi.Infrastructure;
 

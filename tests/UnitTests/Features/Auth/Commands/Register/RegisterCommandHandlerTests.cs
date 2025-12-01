@@ -1,9 +1,6 @@
-using FluentAssertions;
 using Moq;
 using TwitterCloneApi.Application.Common.Interfaces;
 using TwitterCloneApi.Application.Features.Auth.Commands.Register;
-using TwitterCloneApi.Domain.Entities;
-using Xunit;
 
 namespace UnitTests.Features.Auth.Commands.Register;
 

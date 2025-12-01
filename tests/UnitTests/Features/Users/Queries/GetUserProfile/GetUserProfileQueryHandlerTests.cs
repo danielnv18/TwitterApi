@@ -1,9 +1,7 @@
 using AutoMapper;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
-using Moq;
 using TwitterCloneApi.Application.Common.Exceptions;
-using TwitterCloneApi.Application.Common.Interfaces;
 using TwitterCloneApi.Application.Features.Users.Common;
 using TwitterCloneApi.Application.Features.Users.Queries.GetUserProfile;
 using TwitterCloneApi.Domain.Entities;
