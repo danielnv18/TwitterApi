@@ -1,4 +1,5 @@
 using FluentAssertions;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Mvc.Testing;
 using System.Net;
 using System.Net.Http.Headers;
@@ -10,24 +11,31 @@ using TwitterCloneApi.Application.Features.Users.Common;
 
 namespace TwitterCloneApi.IntegrationTests.Features.Users;
 
-public class GetUserProfileTests : IClassFixture<WebApplicationFactory<Program>>
+public class GetUserProfileTests : IClassFixture<CustomWebApplicationFactory<Program>>
 {
     private readonly HttpClient _client;
+    private readonly CustomWebApplicationFactory<Program> _factory;
 
-    public GetUserProfileTests(WebApplicationFactory<Program> factory)
+    public GetUserProfileTests(CustomWebApplicationFactory<Program> factory)
     {
+        _factory = factory;
         _client = factory.CreateClient();
+
+        using var scope = _factory.Services.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<TwitterCloneApi.Infrastructure.Data.ApplicationDbContext>();
+        db.Database.EnsureCreated();
     }
 
     [Fact]
     public async Task GetUserProfile_ValidUsername_ReturnsUserProfile()
     {
         // Arrange - Register a user
-        var username = $"testuser_{Guid.NewGuid():N}";
+        var username = $"user{Guid.NewGuid():N}"[..15]; // Max 20 chars, using 15 to be safe
         var email = $"test_{Guid.NewGuid():N}@example.com";
         var registerCommand = new RegisterCommand(username, email, "Test1234");
 
-        await _client.PostAsJsonAsync("/api/auth/register", registerCommand);
+        var registerResponse = await _client.PostAsJsonAsync("/api/auth/register", registerCommand);
+        registerResponse.EnsureSuccessStatusCode(); // Ensure registration succeeded
 
         // Act - Get user profile
         var response = await _client.GetAsync($"/api/users/{username}");

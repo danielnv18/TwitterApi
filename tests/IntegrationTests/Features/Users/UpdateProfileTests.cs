@@ -1,4 +1,5 @@
 using FluentAssertions;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Mvc.Testing;
 using System.Net;
 using System.Net.Http.Headers;
@@ -11,20 +12,26 @@ using TwitterCloneApi.Application.Features.Users.Common;
 
 namespace TwitterCloneApi.IntegrationTests.Features.Users;
 
-public class UpdateProfileTests : IClassFixture<WebApplicationFactory<Program>>
+public class UpdateProfileTests : IClassFixture<CustomWebApplicationFactory<Program>>
 {
     private readonly HttpClient _client;
+    private readonly CustomWebApplicationFactory<Program> _factory;
 
-    public UpdateProfileTests(WebApplicationFactory<Program> factory)
+    public UpdateProfileTests(CustomWebApplicationFactory<Program> factory)
     {
+        _factory = factory;
         _client = factory.CreateClient();
+
+        using var scope = _factory.Services.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<TwitterCloneApi.Infrastructure.Data.ApplicationDbContext>();
+        db.Database.EnsureCreated();
     }
 
     [Fact]
     public async Task UpdateProfile_ValidRequest_UpdatesProfile()
     {
         // Arrange - Register and login
-        var username = $"testuser_{Guid.NewGuid():N}";
+        var username = $"user{Guid.NewGuid():N}"[..15];
         var email = $"test_{Guid.NewGuid():N}@example.com";
         var password = "Test1234";
         var registerCommand = new RegisterCommand(username, email, password);
@@ -36,7 +43,7 @@ public class UpdateProfileTests : IClassFixture<WebApplicationFactory<Program>>
         var loginResponse = await _client.PostAsJsonAsync("/api/auth/login", loginCommand);
         var authResponse = await loginResponse.Content.ReadFromJsonAsync<AuthResponse>();
 
-        _client.DefaultRequestHeaders.Authorization = 
+        _client.DefaultRequestHeaders.Authorization =
             new AuthenticationHeaderValue("Bearer", authResponse!.AccessToken);
 
         // Act - Update profile

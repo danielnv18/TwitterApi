@@ -1,4 +1,5 @@
 using FluentAssertions;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Mvc.Testing;
 using System.Net;
 using System.Net.Http.Headers;
@@ -10,20 +11,26 @@ using TwitterCloneApi.Application.Features.Users.Commands.ChangePassword;
 
 namespace TwitterCloneApi.IntegrationTests.Features.Users;
 
-public class ChangePasswordTests : IClassFixture<WebApplicationFactory<Program>>
+public class ChangePasswordTests : IClassFixture<CustomWebApplicationFactory<Program>>
 {
     private readonly HttpClient _client;
+    private readonly CustomWebApplicationFactory<Program> _factory;
 
-    public ChangePasswordTests(WebApplicationFactory<Program> factory)
+    public ChangePasswordTests(CustomWebApplicationFactory<Program> factory)
     {
+        _factory = factory;
         _client = factory.CreateClient();
+
+        using var scope = _factory.Services.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<TwitterCloneApi.Infrastructure.Data.ApplicationDbContext>();
+        db.Database.EnsureCreated();
     }
 
     [Fact]
     public async Task ChangePassword_ValidRequest_ChangesPasswordSuccessfully()
     {
         // Arrange - Register and login
-        var username = $"testuser_{Guid.NewGuid():N}";
+        var username = $"user{Guid.NewGuid():N}"[..15];
         var email = $"test_{Guid.NewGuid():N}@example.com";
         var password = "OldPassword123";
         var registerCommand = new RegisterCommand(username, email, password);
@@ -35,7 +42,7 @@ public class ChangePasswordTests : IClassFixture<WebApplicationFactory<Program>>
         var loginResponse = await _client.PostAsJsonAsync("/api/auth/login", loginCommand);
         var authResponse = await loginResponse.Content.ReadFromJsonAsync<AuthResponse>();
 
-        _client.DefaultRequestHeaders.Authorization = 
+        _client.DefaultRequestHeaders.Authorization =
             new AuthenticationHeaderValue("Bearer", authResponse!.AccessToken);
 
         // Act - Change password
@@ -62,7 +69,7 @@ public class ChangePasswordTests : IClassFixture<WebApplicationFactory<Program>>
     public async Task ChangePassword_IncorrectCurrentPassword_ReturnsUnauthorized()
     {
         // Arrange - Register and login
-        var username = $"testuser_{Guid.NewGuid():N}";
+        var username = $"user{Guid.NewGuid():N}"[..15];
         var email = $"test_{Guid.NewGuid():N}@example.com";
         var password = "CorrectPassword123";
         var registerCommand = new RegisterCommand(username, email, password);
@@ -74,7 +81,7 @@ public class ChangePasswordTests : IClassFixture<WebApplicationFactory<Program>>
         var loginResponse = await _client.PostAsJsonAsync("/api/auth/login", loginCommand);
         var authResponse = await loginResponse.Content.ReadFromJsonAsync<AuthResponse>();
 
-        _client.DefaultRequestHeaders.Authorization = 
+        _client.DefaultRequestHeaders.Authorization =
             new AuthenticationHeaderValue("Bearer", authResponse!.AccessToken);
 
         // Act - Try to change password with wrong current password
