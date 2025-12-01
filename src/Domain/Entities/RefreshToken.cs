@@ -21,7 +21,9 @@ public class RefreshToken : BaseEntity
     public void Revoke()
     {
         if (IsRevoked)
+        {
             throw new InvalidOperationException("Token is already revoked");
+        }
 
         RevokedAt = DateTime.UtcNow;
     }

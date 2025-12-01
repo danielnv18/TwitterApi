@@ -28,37 +28,53 @@ public class User : BaseEntity
     public void ValidateUsername()
     {
         if (string.IsNullOrWhiteSpace(Username))
+        {
             throw new ArgumentException("Username cannot be empty");
+        }
 
         if (Username.Length < 3 || Username.Length > 100)
+        {
             throw new ArgumentException("Username must be between 3 and 100 characters");
+        }
 
         if (!System.Text.RegularExpressions.Regex.IsMatch(Username, "^[a-zA-Z0-9_]+$"))
+        {
             throw new ArgumentException("Username can only contain letters, numbers, and underscores");
+        }
     }
 
     public void ValidateEmail()
     {
         if (string.IsNullOrWhiteSpace(Email))
+        {
             throw new ArgumentException("Email cannot be empty");
+        }
 
         if (!System.Text.RegularExpressions.Regex.IsMatch(Email,
             @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+        {
             throw new ArgumentException("Invalid email format");
+        }
     }
 
     public void ValidateDisplayName()
     {
         if (string.IsNullOrWhiteSpace(DisplayName))
+        {
             throw new ArgumentException("Display name cannot be empty");
+        }
 
         if (DisplayName.Length < 1 || DisplayName.Length > 50)
+        {
             throw new ArgumentException("Display name must be between 1 and 50 characters");
+        }
     }
 
     public void ValidateBio()
     {
         if (Bio != null && Bio.Length > 500)
+        {
             throw new ArgumentException("Bio cannot exceed 500 characters");
+        }
     }
 }

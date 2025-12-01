@@ -57,9 +57,13 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, AuthRespo
         if (existingUser != null)
         {
             if (existingUser.Email == request.Email)
+            {
                 throw new ConflictException($"User with email {request.Email} already exists.");
+            }
             else
+            {
                 throw new ConflictException($"Username {request.Username} is already taken.");
+            }
         }
 
         var passwordHash = _passwordHasher.HashPassword(request.Password);

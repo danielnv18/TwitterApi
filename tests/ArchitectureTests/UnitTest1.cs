@@ -1,4 +1,4 @@
-﻿namespace ArchitectureTests;
+namespace ArchitectureTests;
 
 public class UnitTest1
 {

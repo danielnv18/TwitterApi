@@ -1,7 +1,7 @@
+using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
-using System.Text;
 using Serilog;
 using TwitterCloneApi.API.Endpoints;
 using TwitterCloneApi.API.Middleware;

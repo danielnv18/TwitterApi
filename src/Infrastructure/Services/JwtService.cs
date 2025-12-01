@@ -60,7 +60,9 @@ public class JwtService : IJwtService
     public Guid? ValidateAccessToken(string token)
     {
         if (string.IsNullOrWhiteSpace(token))
+        {
             return null;
+        }
 
         var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Secret"]
             ?? throw new InvalidOperationException("JWT Secret is not configured"));

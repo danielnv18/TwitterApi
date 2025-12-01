@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using TwitterCloneApi.Domain.Entities;
-
 using TwitterCloneApi.Application.Common.Interfaces;
+using TwitterCloneApi.Domain.Entities;
 
 namespace TwitterCloneApi.Infrastructure.Data;
 
