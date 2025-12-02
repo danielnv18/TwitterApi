@@ -1,7 +1,6 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using Scalar.AspNetCore;
 using Serilog;
 using TwitterCloneApi.API.Endpoints;
 using TwitterCloneApi.Application;
@@ -35,7 +34,7 @@ builder.Services.AddInfrastructure(builder.Configuration);
 // Add HttpContextAccessor for CurrentUserService
 builder.Services.AddHttpContextAccessor();
 
-// Add OpenAPI documentation (.NET 10 built-in support)
+// Add built-in OpenAPI document support (ASP.NET Core)
 builder.Services.AddOpenApi();
 
 // Add Authentication
@@ -78,8 +77,8 @@ var app = builder.Build();
 // Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())
 {
+    // Expose OpenAPI document at /openapi/v1.json
     app.MapOpenApi();
-    app.MapScalarApiReference();
 }
 
 app.UseSerilogRequestLogging();

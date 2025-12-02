@@ -32,7 +32,14 @@ const handleSignup = async () => {
 
   } catch (e: any) {
     console.error(e)
-    error.value = e.response?.data?.detail || 'Signup failed'
+    if (e.response?.data?.errors) {
+      // Format validation errors
+      const errors = e.response.data.errors
+      const errorMessages = Object.values(errors).flat().join('\n')
+      error.value = errorMessages
+    } else {
+      error.value = e.response?.data?.message || 'Signup failed'
+    }
   }
 }
 </script>
@@ -41,6 +48,10 @@ const handleSignup = async () => {
   <div>
     <h1 class="text-3xl font-bold mb-8">Create your account</h1>
     
+    <div v-if="error" class="bg-red-500/10 border border-red-500 text-red-500 p-4 rounded mb-4 whitespace-pre-wrap">
+      {{ error }}
+    </div>
+
     <form @submit.prevent="handleSignup" class="space-y-4">
       <input 
         v-model="name"
